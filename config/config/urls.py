@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from web.views import Home
+from web.views import Home,TarifasVista,CeldasVista,gestionarSalida
 
 urlpatterns = [
 
     path('', Home, name="home"),
+    path('celdas/', CeldasVista, name="celdas"),
+    path('tarifas/', TarifasVista, name="tarifas"),
+    path('salida/<int:id>', gestionarSalida, name="salida"),
    
    
 

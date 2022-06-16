@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from datetime import datetime
 
-from web.models import Tiquetes,Celdas
+from web.models import Tiquetes,Celdas,Tarifas
 
 # Create your views here.
 def Home(request):
@@ -28,3 +28,39 @@ def Home(request):
 
     return render(request,'index.html',data)
 
+
+def CeldasVista(request):
+
+    return render(request,'celdas.html')
+
+
+
+def TarifasVista(request):
+
+    return render(request,'tarifas.html')
+
+
+
+def gestionarSalida(request,id):
+
+    tiquete=Tiquetes.objects.get(pk=id)
+
+    fechaInicio=tiquete.fecha_ingreso
+    fechaSalida=datetime.now()
+    diferencia=fechaSalida-fechaInicio.replace(tzinfo=None) 
+    durationEnSegundos = diferencia.total_seconds() 
+    duracionEnMinutos=int(durationEnSegundos/60)
+
+    costo=duracionEnMinutos*150
+   
+    datos={
+        'id':id,
+        'tiquete':tiquete
+    }
+
+    if(request.method=='GET'):
+        Tiquetes.objects.filter(pk=id).update(fecha_salida=datetime.now())
+        Tiquetes.objects.filter(pk=id).update(valor_pagado=costo)
+        
+
+    return render(request,'salida.html',datos)
